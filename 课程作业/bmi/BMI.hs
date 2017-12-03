@@ -1,5 +1,5 @@
-module Bmi where
-import           Text.Printf
+module BMI where
+import Text.Printf
 
 getFloat :: IO Float
 getFloat = do
