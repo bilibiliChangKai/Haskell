@@ -1,21 +1,33 @@
 module Main where
 
-func :: Integer -> Integer
-func x = (+) 1 $ case x == 0 of 
-            True -> 1
-            _ -> 0
+import System.Random
 
-divisors :: Integer -> [Integer]
-divisors value = [x | x <- [1..value], value `mod` x == 0]
+guess :: IO ()
+guess = do
+  r <- randomIO :: IO Int
+  let n = mod r 101
+  guessNum n
 
--- 返回可以整除n的数，该数范围在0-n
-divs :: Integer -> Integer -> [Integer]
-divs _ 0 = []
-divs n d = if n `mod` d == 0 
-            then d : divs n (d - 1)
-            else divs n (d - 1)
+guessNum :: Int -> IO ()
+guessNum n = do
+  putStrLn "Please input a number:"
+  s <- getInt
+  if s == n
+    then putStrLn "You guess the true number!"
+    else if s > n
+      then do
+        putStrLn "The right number is small than you guess!"
+        guessNum n
+      else do
+        putStrLn "The right number is big than you guess!"
+        guessNum n
 
-triands :: Integer -> [(Integer, Integer, Integer)]
-triands value = [(x, y, z) | x<-[1..value], y<-[1..value], z <- [1..value], x*x + y*y == z*z]
+getInt :: IO Int
+getInt = do
+  a <- getLine
+  return (read a)
+
+ttt :: IO a
+ttt = undefined
 
 main = putStrLn "Hello World"
