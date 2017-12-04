@@ -30,4 +30,5 @@ getInt = do
 ttt :: IO a
 ttt = undefined
 
+main :: IO ()
 main = putStrLn "Hello World"
