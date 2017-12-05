@@ -113,4 +113,6 @@ charsToSubsts (c:cs) = let leftSubsts = charsToSubsts cs in
 -- 将subst p中的所有可能性全部eval组成一个Bool列表
 -- 若列表不存在False,则为全真
 isTaut :: Prop -> Bool
-isTaut p = False `notElem` fmap (`eval` p) (substs p)
+isTaut p = case substs p of
+  []        -> eval [] p
+  otherwise -> False `notElem` fmap (`eval` p) (substs p)
