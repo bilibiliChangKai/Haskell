@@ -1,7 +1,9 @@
+{-# LANGUAGE TemplateHaskell #-}
 module Main where
 
-import System.IO
 import           CheckCreditNumber
+import           Data.List
+import           System.IO
 
 -- 问题1
 t1 :: IO ()
@@ -35,24 +37,41 @@ t9 = return
 readCards :: Handle -> IO [Integer]
 readCards fp = do
   str <- hGetContents fp
-  return $ fmap read $ lines str
+  return $ read <$> lines str
 
 -- 排序并除去重复卡号
-sortCards :: [Integer] -> [Integer]
-sortCards = undefined
+formatCards :: [Integer] -> [Integer]
+formatCards = deleteRepeatCards.sort
+
+-- 除去重复卡号
+deleteRepeatCards :: [Integer] -> [Integer]
+deleteRepeatCards [] = []
+deleteRepeatCards [c] = [c]
+deleteRepeatCards (c1:c2:cs) = if c1 == c2
+  then deleteRepeatCards (c2:cs)
+  else c1:deleteRepeatCards (c2:cs)
 
 -- 检查卡号并存到文件中
 checkCards :: [Integer] -> IO ()
 checkCards [] = return ()
-checkCards (c:cs) = do
+checkCards cs = do
   fpv <- openFile "validCard.txt" WriteMode
   fpi <- openFile "invalidCard.txt" WriteMode
+  writeCards fpv fpi cs
+  hClose fpv
+  hClose fpi
+
+-- 写文件
+writeCards :: Handle -> Handle -> [Integer] -> IO ()
+writeCards _ _ [] = return ()
+writeCards v i (c:cs) = do
   if isValid c
-    then hPrint fpv c
-    else hPrint fpi c
+    then hPrint v c
+    else hPrint i c
+  writeCards v i cs
 
 main :: IO ()
 main = do
   fp <- openFile "cards200.txt" ReadMode
   cards <- readCards fp
-  checkCards $ sortCards cards
+  checkCards $ formatCards cards
