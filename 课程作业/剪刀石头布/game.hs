@@ -69,8 +69,8 @@ showScore str s@(p, c) = do
 -- 游戏整个流程
 playGame :: Score -> IO ()
 playGame s@(p,c) = case (p, c) of
-  (3, _) -> putStrLn "你赢了，算你牛！"
-  (_, 3) -> putStrLn "哈哈，我赢了！"
+  (3, _) -> putStrLn "狗哥SB"
+  (_, 3) -> putStrLn "快给月卡"
   _ -> do
     news <- playOneRound s
     playGame news

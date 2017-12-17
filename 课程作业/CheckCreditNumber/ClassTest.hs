@@ -74,3 +74,4 @@ main = do
   fp <- openFile "cards200.txt" ReadMode
   cards <- readCards fp
   checkCards $ formatCards cards
+  putStrLn "Done"
